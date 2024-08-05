@@ -1,0 +1,9 @@
+# R(A~G)
+G
+A,B->C AND
+A,C->B AND
+A,D->E AND
+B->D AND
+B,C->A AND
+E->G AND
+GET

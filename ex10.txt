@@ -1,0 +1,16 @@
+#DB minimal Cover
+#for DB 그라디언스
+#R( A,B,C,D,E,F )
+F # R( A~F )
+A,B,C->D AND
+C,D,E->F AND
+D,E->A AND
+D,E->B AND
+C,F->B AND
+B,D,F->E AND
+A,E->C AND
+B,C->F AND
+A,B->E AND
+A,B->F AND
+B,F->C AND
+get

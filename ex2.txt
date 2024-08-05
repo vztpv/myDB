@@ -1,0 +1,6 @@
+3 # #offd, #of attribute of Relation R
+#R( A, B, C )
+#   0, 1, 2
+A->B,C AND # A->BC
+B->C AND # B->C
+get # 차후 추가하거나 수정.

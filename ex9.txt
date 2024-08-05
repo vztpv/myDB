@@ -1,0 +1,10 @@
+#
+# DB TEST
+#
+# R( A,B,C,D,E,F,G,H )
+H # # of attributes of Relation R
+A->B
+AND A,B,C,D->E
+AND E,F->G,H
+AND A,C,D,F->E,G
+AND get

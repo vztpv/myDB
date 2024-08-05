@@ -1,0 +1,9 @@
+8# # of attribute
+#R(A,B,C,D,E,F,G,H)
+0->1 AND #A->B
+0,1,2,3->4 AND #ABCD->E
+4,5->6 AND
+4,5->7 AND #EF->G #EF->H
+0,2,3,5->4 AND #ACDF->E 
+0,2,3,5->6 AND  #ACDF->G
+get

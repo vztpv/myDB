@@ -1,0 +1,15 @@
+#R ( A~F )
+F
+A,E,F->C AND
+B,F->C AND
+E,F->D AND
+A,C,D,E->F AND
+GET
+
+#R ( A~E )
+#E
+#D->C AND
+#C,E->A AND
+#D->A AND
+#A,E->D AND
+#GET
