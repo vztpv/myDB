@@ -1,4 +1,4 @@
-# myDB
+# myDB - wrong..
 Find minimal cover and keys from given FDs
 
 # ex
