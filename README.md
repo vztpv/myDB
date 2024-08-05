@@ -15,12 +15,12 @@ Find minimal cover and keys from given FDs
     B F ->C 
     
     minimal cover
-    D E ->A F 
+    A B ->D F 
+    D E ->A B 
     C F ->B 
     B D F ->E 
     A E ->C 
     B C ->F 
-    A B ->D F 
     B F ->C 
     
     keys
@@ -30,3 +30,4 @@ Find minimal cover and keys from given FDs
     B C D 
     A B 
     B D F 
+
