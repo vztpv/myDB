@@ -26,7 +26,7 @@ int yyparse( void );
 int yylex( void );
 /* variables */
     // temp for grammar function and initial fd
-Fd* fdTemp;
+FD* fdTemp;
 int attributeN;
     // main value..
 SOF* mainSOF=NULL;
@@ -47,7 +47,7 @@ void checkIdRange( const int id );
 %}
 %token <ival> NID
 %token <sval> SID
-%token FD
+%token ARROW
 %token COMA
 %token AND
 %token GET
@@ -59,7 +59,7 @@ program:
         delete fdTemp; fdTemp = NULL; //cf) Free( <T>** ){ delete <T>*, <T>* = NULL ? }
         // get...
         SOF* temp = ( mainSOF->Clone() );
-        temp->PrintFds( TRUE );
+        temp->PrintFDs( TRUE );
         delete temp; temp = NULL;
         temp = ( mainSOF->Clone() );
 
@@ -67,8 +67,8 @@ program:
         temp->BeMinimalCover();
         SOF* temp2 = temp->Clone();
         temp2->Simple();
-        temp2->PrintFds( TRUE );
-		temp2->PrintFds();
+        temp2->PrintFDs( TRUE );
+		temp2->PrintFDs();
         delete temp2;
 
         cout << "keys" << endl;
@@ -80,8 +80,8 @@ program:
         temp2->PrintKeys();
 		delete temp2;
        // cout << "getClosure test" << endl;
-     //   Fd* fd;
-       // fd = new Fd( attributeN );
+     //   FD* fd;
+       // fd = new FD( attributeN );
       //  fd->Set( 0, LEFT );
        // fd->Set( 1, LEFT );
 
@@ -89,7 +89,7 @@ program:
        // temp->GetClosure( fd );
 
         //fd->Print();
-       // fd->PrintFd( TRUE );
+       // fd->PrintFD( TRUE );
         delete temp;
        // delete fd;
     }
@@ -98,7 +98,7 @@ AttrN:
         attributeN = $1;//
         if( attributeN < 0 ){ yyerror( "attributeN < 0" ); }
         // fdTemp, mainSOF MAKE
-        fdTemp = new Fd( attributeN );
+        fdTemp = new FD( attributeN );
         mainSOF = new SOF( FDMAX, attributeN );
     }
     |
@@ -115,7 +115,7 @@ AttrN:
         //
         if( attributeN < 0 ){ yyerror( "attributeN < 0" ); }
         // fdTemp, mainSOF MAKE
-        fdTemp = new Fd( attributeN );
+        fdTemp = new FD( attributeN );
         mainSOF = new SOF( FDMAX, attributeN );
     }
 FDRules:
@@ -123,7 +123,7 @@ FDRules:
     |
     ;
 FDRule:
-    LeftIDs FD RightIDs {
+    LeftIDs ARROW RightIDs {
         fdTemp->Reset(); // for next
     }
 LeftIDs:
@@ -141,19 +141,19 @@ LeftIDs:
 RightIDs:
     ID COMA RightIDs {
         checkIdRange( $1 );
-        Fd* temp = fdTemp->Clone();
+        FD* temp = fdTemp->Clone();
         
         temp->Set( $1, RIGHT );
 
-        mainSOF->AddFd2( temp ); //
+        mainSOF->AddFD2( temp ); //
     }
     | ID {
         checkIdRange( $1 );  
-        Fd* temp = fdTemp->Clone();
+        FD* temp = fdTemp->Clone();
         
         temp->Set( $1, RIGHT );
 
-        mainSOF->AddFd2( temp ); //
+        mainSOF->AddFD2( temp ); //
     }
     |
     ;

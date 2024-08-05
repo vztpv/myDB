@@ -1,5 +1,5 @@
-#ifndef Fd_H_INCLUDED
-#define Fd_H_INCLUDED
+#ifndef FD_H_INCLUDED
+#define FD_H_INCLUDED
 
 #include <stdlib.h>
 #include <iostream>
@@ -9,22 +9,22 @@ using namespace std;
 */
 enum BOOL { FALSE=0, TRUE=1, UNKNOWN=-2 };
 typedef enum BOOL BOOL;
-/* Fd items */
+/* FD items */
 enum FDITEM { NOTUSE, ADDLEFT, LEFT, RIGHT };
 typedef enum FDITEM FDITEM;
 /* clone option */
 enum CLONEOPTION { ALL, LO, RO }; // all, LeftOnly, RightOnly( 다른것은 다 NOTUSE로 )
 typedef enum CLONEOPTION CLONEOPTION;
 
-class Fd{
+class FD{
 /* default Functions */
 public:
     /** attrExist 제거? */
-	explicit Fd( const int attributeN );
-	Fd( const Fd& p );
-    ~Fd();
+	explicit FD( const int attributeN );
+	FD( const FD& p );
+    ~FD();
     /* operator */
-    Fd& operator=( const Fd& p ); // attributeN가 같을때 가능, p와 같아진다. 단,  Deep Copy!!
+    FD& operator=( const FD& p ); // attributeN가 같을때 가능, p와 같아진다. 단,  Deep Copy!!
 protected:
     void Initial( const int attributeN );
 /* entry */
@@ -43,9 +43,9 @@ private:
     int nol, nor;
 /* method */
 public:
-    Fd* Clone( const CLONEOPTION op=ALL )const;
+    FD* Clone( const CLONEOPTION op=ALL )const;
     void Print()const;
-    void PrintFd( BOOL useAlphabet=FALSE )const;
+    void PrintFD( BOOL useAlphabet=FALSE )const;
     void PrintKey( BOOL useAlphabet=FALSE )const;
 	//
     void Free(); /// attribute를 free하고, is~ false로, attribute=NULL, attrN = 0;
@@ -56,18 +56,18 @@ public:
     void Reset();
     /** AttributeReset() */
     /* is~ */
-    BOOL isLeftPartEqual( Fd* fd )const;
+    BOOL isLeftPartEqual( FD* fd )const;
     /* numOf~ */
     int numOfLEFT()const;
     int numOfRIGHT()const;
 /* only using in class function */
 private:
-    void FdIsCopy( const Fd& fd );
-    void FdAllIsFalse();
+    void FDIsCopy( const FD& fd );
+    void FDAllIsFalse();
 	//
 	void PrintAlphabet( const int attrNo )const;
 /* do not */
 private:
 };
 
-#endif // Fd_H_INCLUDED
+#endif // FD_H_INCLUDED

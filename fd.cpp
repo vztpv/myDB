@@ -1,12 +1,12 @@
 #include "fd.h"
 
-Fd::Fd( int attributeN ){
+FD::FD( int attributeN ){
     Initial( attributeN );
 }
-Fd::Fd( const Fd& p ){
+FD::FD( const FD& p ){
     this->attributeN = p.attributeN;
 
-    FdIsCopy( p );
+    FDIsCopy( p );
 
     if( 0 < p.attributeN ){
         this->attribute = new FDITEM[attributeN];
@@ -19,10 +19,10 @@ Fd::Fd( const Fd& p ){
     this->nol = p.nol;
     this->nor = p.nor;
 }
-Fd::~Fd(){
+FD::~FD(){
     Free();
 }
-Fd& Fd::operator=( const Fd& p ){  //
+FD& FD::operator=( const FD& p ){  //
     if( this->attributeN != p.attributeN ){ exit( -1 ); }
     if( NULL == p.attribute && NULL == this->attribute ){
     }
@@ -37,7 +37,7 @@ Fd& Fd::operator=( const Fd& p ){  //
         for( int i=0;i< attributeN;i++ ){
             this->attribute[i] = p.attribute[i];
         }
-        FdIsCopy( p );
+        FDIsCopy( p );
         this->nol = p.nol;
         this->nor = p.nor;
     }
@@ -46,15 +46,15 @@ Fd& Fd::operator=( const Fd& p ){  //
 /** To Do
 *  Reset과 중복 제거..
 */
-void Fd::Initial( const int attributeN ){
+void FD::Initial( const int attributeN ){
     attribute = new FDITEM[attributeN];
     this->attributeN = attributeN;
     Reset();
 }
 /* method */
-Fd* Fd::Clone( const CLONEOPTION op )const{
-    Fd* temp;
-    temp = new Fd( *this );
+FD* FD::Clone( const CLONEOPTION op )const{
+    FD* temp;
+    temp = new FD( *this );
     //op!!
     for( int i=0;i < attributeN;i++ ){
         if( LO == op && LEFT != temp->attribute[i] ){
@@ -75,7 +75,7 @@ Fd* Fd::Clone( const CLONEOPTION op )const{
 
     return temp;
 }
-void Fd::Print()const{
+void FD::Print()const{
     for( int i=0;i < attributeN;i++ ){
         switch( attribute[i] ){
         case NOTUSE:    //
@@ -94,14 +94,14 @@ void Fd::Print()const{
     }
     cout << endl;
 }
-void Fd::PrintAlphabet( const int attrNo )const{
+void FD::PrintAlphabet( const int attrNo )const{
 	const int size = 'z' - 'a' + 1;
 	const int number = attrNo / size;
 	const char alpha = ( attrNo % size ) + 'A';
 	cout << alpha;
 	if( number > 0 ){ cout << number; }
 }
-void Fd::PrintFd( BOOL useAlphabet )const{
+void FD::PrintFD( BOOL useAlphabet )const{
     // lefts -> rights \n
     for( int i=0;i < attributeN;i++ ){
         if( LEFT == attribute[i] ){
@@ -132,7 +132,7 @@ void Fd::PrintFd( BOOL useAlphabet )const{
     printf( "\n" );
     //cout << "nor is " << nor << endl;
 }
-void Fd::PrintKey( BOOL useAlphabet )const{
+void FD::PrintKey( BOOL useAlphabet )const{
     for( int i=0;i < attributeN;i++ ){
         if( LEFT == attribute[i]
            || ADDLEFT == attribute[i] ){
@@ -147,18 +147,18 @@ void Fd::PrintKey( BOOL useAlphabet )const{
     }
     cout << endl;
 }
-void Fd::Free(){
+void FD::Free(){
     //cout << "free.." << endl;
     if( NULL != attribute ){
         delete[] attribute;
         attribute = NULL;
         attributeN = 0;
         nol = 0; nor = 0;
-        FdAllIsFalse(); /// empty -> all False!!
+        FDAllIsFalse(); /// empty -> all False!!
     }
     //cout << "freed.." << endl;
 }
-void Fd::Set( const int attrNo, const FDITEM flag ){
+void FD::Set( const int attrNo, const FDITEM flag ){
     // attribute[attrNo] != flag AND
     const FDITEM bef = attribute[attrNo];
     if( flag == bef ){ return; }
@@ -178,11 +178,11 @@ void Fd::Set( const int attrNo, const FDITEM flag ){
     //
     attribute[attrNo] = flag;
 }
-FDITEM Fd::Get( const int attrNo )const{
+FDITEM FD::Get( const int attrNo )const{
     return attribute[attrNo];
 }
 //
-void Fd::Reset(){
+void FD::Reset(){
     /* attribute reset */
     if( NULL != attribute ){
         for( int i=0;i < attributeN;i++ ){
@@ -201,7 +201,7 @@ void Fd::Reset(){
     isUse = TRUE; // NULLÀÌ¸é notUSE!!
     isChanged = UNKNOWN;
 }
-BOOL Fd::isLeftPartEqual( Fd* fd )const{
+BOOL FD::isLeftPartEqual( FD* fd )const{
     if( NULL == fd ){ return FALSE; }
     if( fd->attributeN != this->attributeN ){ return UNKNOWN; } /// 추후 생각한다.
     BOOL result = TRUE;
@@ -225,7 +225,7 @@ BOOL Fd::isLeftPartEqual( Fd* fd )const{
 /** To Do
 * return nol, return nor;
 */
-int Fd::numOfLEFT()const{
+int FD::numOfLEFT()const{
     /*int num = 0;
     for( int i=0;i < attributeN;i++ ){
         if( LEFT == attribute[i] ){
@@ -235,7 +235,7 @@ int Fd::numOfLEFT()const{
     return num;*/
     return nol;
 }
-int Fd::numOfRIGHT()const{
+int FD::numOfRIGHT()const{
     /*int num = 0;
     for( int i=0;i < attributeN;i++ ){
         if( RIGHT == attribute[i] ){
@@ -246,7 +246,7 @@ int Fd::numOfRIGHT()const{
     return nor;
 }
 /* private method */
-void Fd::FdIsCopy( const Fd& fd ){
+void FD::FDIsCopy( const FD& fd ){
     isKey = fd.isKey;
     isBCNF = fd.isBCNF;
     is3NF = fd.is3NF;
@@ -255,7 +255,7 @@ void Fd::FdIsCopy( const Fd& fd ){
     isUse = fd.isUse;
     isChanged = fd.isChanged;
 }
-void Fd::FdAllIsFalse(){
+void FD::FDAllIsFalse(){
     isKey = FALSE;
     isBCNF = FALSE;
     is3NF = FALSE;

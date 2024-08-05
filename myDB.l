@@ -26,7 +26,7 @@ extern "C" {
             return NID;
        }
 [A-Z][0-9]* { yylval.sval = yytext; return SID; }
-(->) { return FD; }
+(->) { return ARROW; }
 [,] { return COMA; }
 "and" { return AND; }
 "AND" { return AND; }

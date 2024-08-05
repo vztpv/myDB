@@ -23,17 +23,17 @@ protected:
     //void Reset();
 /* entry */
 private:
-    Fd** fds;
+    FD** fds;
     int fdMAX; //
     int fdN; //
     int attributeN;
 /* method */
 public:
     SOF* Clone()const;
-    Fd* FdClone( const int fdNo, const CLONEOPTION op )const;
+    FD* FDClone( const int fdNo, const CLONEOPTION op )const;
     void Expand();
-    int AddFd( Fd* fd, int flag=0 );
-    int AddFd2( Fd* fd, int flag=0 ); 
+    int AddFD( FD* fd, int flag=0 );
+    int AddFD2( FD* fd, int flag=0 ); 
 
     ///int flag ���, bool flag?
 							/// flag == 0 then Left�� ���� ���� �ִٸ� ã�Ƽ���ģ��.
@@ -43,18 +43,18 @@ public:
 	* print fd,key using alphabet!!
 	// BOOL useAlphabet
 	*/
-    void PrintFds( BOOL useAlphabet = FALSE )const;
+    void PrintFDs( BOOL useAlphabet = FALSE )const;
     void PrintKeys( BOOL useAlphabet = FALSE )const;
     void AllFree(); /// ��� FD�� attribute, FD array�� �� �����.
-    void Simple(); /// �ߺ�, LEFT�� ���� ���, RIGHT�� ���� ��츦 �����Ѵ�.
+    void Simple(int flag = 0); /// �ߺ�, LEFT�� ���� ���, RIGHT�� ���� ��츦 �����Ѵ�.
     void SimpleKey();
     //
     void BeClosure(); /** fd�� �߰�, ������ ����. */
     void BeClosure( const int checki );
-    void ExchangeFdInMinimalCover( const int fdNo, const int right, const int left );
+    void ExchangeFDInMinimalCover( const int fdNo, const int right, const int left );
     void BeMinimalCover(); /** fd�� �߰�, ������ �Ͼ �� �ִ�. */
 	//
-	void GetClosure( Fd* fd );
+	void GetClosure( FD* fd );
 	// fd-�����Ҵ�.. fd�� ����Ű�� ���� �����Ѵ�. L->(L�� Ŭ���� )
 	//
     void BeKey();
@@ -62,11 +62,11 @@ public:
     FDITEM Get( const int fdNo, const int attrNo )const;
     void Set( const int fdNo, const int attrNo, const FDITEM flag );
 
-    int GetFdN()const;
+    int GetFDN()const;
 /* only using in class function */
 private:
     void Free(); /// FD array�� �����.
-    void EmptyEqualFd(); // rename?
+    void EmptyEqualFD(); // rename?
     void DeleteEmptyLR(); // empty Left, right..
 /* do not */
 private:

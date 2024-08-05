@@ -7,10 +7,10 @@ SOF::SOF( const SOF& p ){
     fdN = p.fdN;
     attributeN = p.attributeN;
     fds = NULL;
-    fds = new Fd*[fdMAX];
+    fds = new FD*[fdMAX];
     for( int i=0;i< fdMAX;i++ ){
         if( NULL != p.fds[i] ){
-            fds[i] = new Fd( *(p.fds[i]) ); // copy constructor..
+            fds[i] = new FD( *(p.fds[i]) ); // copy constructor..
         }
         else{
             fds[i] = NULL;
@@ -25,29 +25,29 @@ void SOF::Initial( const int fdMAX, const int fdN, const int attributeN ){
     this->fdMAX = fdMAX;
     this->fdN = fdN;
     this->attributeN = attributeN;
-    this->fds = new Fd*[fdMAX];
+    this->fds = new FD*[fdMAX];
 
     for( int i=0;i < fdN;i++ ){
-        this->fds[i] = new Fd( attributeN );
+        this->fds[i] = new FD( attributeN );
     }
     // NULL initial
     for( int i=fdN;i < fdMAX;i++ ){
-        this->fds[i] = NULL;//new Fd( attributeN, FALSE );
+        this->fds[i] = NULL;//new FD( attributeN, FALSE );
     }
 }
 //void SOF::Reset(){ }
 /* method */
 //public:
 /** To Do
-* Clone, FdClone..
+* Clone, FDClone..
 */
 SOF* SOF::Clone()const{
     SOF* temp;
     temp = new SOF( *this );
     return temp;
 }
-Fd* SOF::FdClone( const int fdNo, const CLONEOPTION op )const{
-    Fd* temp = fds[fdNo]->Clone( op );
+FD* SOF::FDClone( const int fdNo, const CLONEOPTION op )const{
+    FD* temp = fds[fdNo]->Clone( op );
     return temp;
 }
 
@@ -59,10 +59,10 @@ void SOF::Set( const int fdNo, const int attrNo, const FDITEM flag ){
 }
 void SOF::Expand(){
     //cout << "sof expand "<< endl;
-    Fd** temp;
-    const int tempFdMax = fdMAX*2;
-    temp = new Fd*[tempFdMax];
-    for( int i=0;i < tempFdMax;i++ ){
+    FD** temp;
+    const int tempFDMax = fdMAX*2;
+    temp = new FD*[tempFDMax];
+    for( int i=0;i < tempFDMax;i++ ){
         temp[i] = NULL;
     }
     // temp로 data를 옮긴다.
@@ -74,7 +74,7 @@ void SOF::Expand(){
     fds = temp;
     fdMAX = fdMAX * 2;
 }
-int SOF::AddFd( Fd* fd, const int flag ){ // if flag is true, then, 이미 왼쪽이
+int SOF::AddFD( FD* fd, const int flag ){ // if flag is true, then, 이미 왼쪽이
 //같은 것이 있으면 합친다.
     // 같은 것을 찾아서 있다면 합친다.
     int index = -1;// 같은 것의 index..
@@ -98,7 +98,7 @@ int SOF::AddFd( Fd* fd, const int flag ){ // if flag is true, then, 이미 왼�
         //cout << "같은 것이 있어서 fd삭제.." << endl;
         /*if( flag == 1 ){ // 같은 것을 아래로 가게 한다.
             //exchange fds[fdN-1], fds[i]
-            Fd* temp = fds[fdN-1];
+            FD* temp = fds[fdN-1];
             fds[fdN-1] = fds[index];
             fds[index] = temp;
 
@@ -114,7 +114,7 @@ int SOF::AddFd( Fd* fd, const int flag ){ // if flag is true, then, 이미 왼�
     return fdN-1;
 }
 
-int SOF::AddFd2( Fd* fd, const int flag ){ //
+int SOF::AddFD2( FD* fd, const int flag ){ // cf) AddFD(fd, -1);
     if( fdMAX == fdN ){
         Expand();
     }
@@ -136,7 +136,7 @@ int SOF::AddFd2( Fd* fd, const int flag ){ //
     }
     QuickSort<INSORT> qs;
     qs.sort( array, 0, array.size()-1 );
-    Fd** temp = new Fd*[fdN];
+    FD** temp = new FD*[fdN];
     for( int i=0;i < fdN;i++ ){
         temp =
     }
@@ -158,11 +158,11 @@ void SOF::Print()const{
 /**
 *
 */
-void SOF::PrintFds( BOOL useAlphabet)const{
+void SOF::PrintFDs( BOOL useAlphabet)const{
     if( NULL == fds ){ printf( "fds is NULL\n" ); return; }
     for( int i=0;i< fdMAX;i++ ){
         if( NULL != fds[i] ){
-            fds[i]->PrintFd( useAlphabet );
+            fds[i]->PrintFD( useAlphabet );
         }
     }
     cout << endl;
@@ -187,7 +187,7 @@ void SOF::AllFree(){
 /** To Do
 *
 */
-void SOF::EmptyEqualFd(){ // rename?
+void SOF::EmptyEqualFD(){ // rename?
     BOOL temp = TRUE;
     for( int i=0;i < fdN-1;i++ ){
         for( int j=i+1;j < fdN;j++ ){
@@ -236,20 +236,20 @@ void SOF::DeleteEmptyLR(){ // empty Left, right..
     fdN = size; /// check...
 }
 //
-void SOF::Simple(){
-    Fd** temp = new Fd*[fdN];
-    int trueFdN = fdN;
+void SOF::Simple(int flag){
+    FD** temp = new FD*[fdN];
+    int trueFDN = fdN;
     for( int i=0;i < fdN;i++ ){
         temp[i] = fds[i];
         fds[i] = NULL;
     }
     fdN = 0;
-    for( int i=0;i < trueFdN;i++ ){
-        AddFd( temp[i], 0 );
+    for( int i=0;i < trueFDN;i++ ){
+        AddFD( temp[i], flag);
     }
     delete[] temp;
     //
-    EmptyEqualFd();
+    EmptyEqualFD();
     DeleteEmptyLR();
 } /// 중복, LEFT가 없는 경우, RIGHT가 없는 경우를 제거한다.
 void SOF::SimpleKey(){
@@ -278,6 +278,7 @@ void SOF::SimpleKey(){
             }
         }
     }
+    EmptyEqualFD();
     DeleteEmptyLR();
 }
 //Total Closure
@@ -328,12 +329,12 @@ void SOF::SimpleKey(){
 void SOF::BeClosure( const int checki ){
     BOOL can=TRUE;
     BOOL end=FALSE;
-    const int trueFdN = fdN-1;
+    const int trueFDN = fdN-1;
 	const int iterMax = 1000; int iter = 0; /// use ITER MAX = 1000 // make MACRO!!
     ////////////
     while( !end ){
         end = TRUE;
-        for( int j=0;j < trueFdN; j++ ){
+        for( int j=0;j < trueFDN; j++ ){
             can = FALSE;
             // closure에 추가 할 것이 있는지 찾는다.
             for( int k=0;k < attributeN;k++ ){
@@ -364,37 +365,36 @@ void SOF::BeClosure( const int checki ){
         }
     }
 }
-void SOF::ExchangeFdInMinimalCover( const int fdNo, const int right, const int left ){
-    Fd* fdTemp = this->fds[fdNo]->Clone( LO );
+void SOF::ExchangeFDInMinimalCover( const int fdNo, const int right, const int left ){
+    FD* fdTemp = this->fds[fdNo]->Clone( LO );
     SOF* sof = this->Clone();
     int index;
     fdTemp->Set( left, NOTUSE );
-    index = sof->AddFd( fdTemp, 0 );
+    index = sof->AddFD( fdTemp, -1 );
     //
     sof->BeClosure( index );
     //
     if( RIGHT == sof->Get( index, right ) ){
-        Fd* fdTemp = fds[fdNo]->Clone( LO );
+        FD* fdTemp = fds[fdNo]->Clone( LO );
         fdTemp->Set( left, NOTUSE );
         this->Set( fdNo, right, NOTUSE );
         fdTemp->Set( right, RIGHT );
-        index = this->AddFd( fdTemp, 0 );
+        index = this->AddFD( fdTemp, -1 );
         //
-        //cout << "AddFd" << endl;
+        //cout << "AddFD" << endl;
     }
     if( sof->fdN > 1000 ){
         cout << "fdN is " << fdN << endl;
     }
     /// delete temp /// cf using clone then more easy!! // later change!!
     delete sof; sof = NULL;
-    //delete fdTemp; fdTemp = NULL;
 
 }
 //get
-void SOF::GetClosure( Fd* fd ){
+void SOF::GetClosure( FD* fd ){
 	SOF* sof = this->Clone(); // new
 
-	sof->AddFd( fd, -1 );
+	sof->AddFD( fd, -1 );
 	sof->BeClosure( sof->fdN-1 );
 	sof->fds[sof->fdN-1] = NULL;
 
@@ -405,7 +405,7 @@ void SOF::GetClosure( Fd* fd ){
 void SOF::BeMinimalCover(){
     if( 0 == this->fdN ){ cout << "fdN==0" << endl; return; }
     //this->BeClosure(); // not use!!
-    //this->Simple();
+    this->Simple(-1);
 
     /** check if (X-{B}}+ contains A? */
     int tempFDN = this->fdN;
@@ -420,9 +420,9 @@ void SOF::BeMinimalCover(){
                     for( int B=0;B < this->attributeN;B++ ){
                         if( LEFT == this->Get( i, B )  //
                             ){ // is A
-                            this->ExchangeFdInMinimalCover( i, A, B );
-                            if( LEFT != this->Get( i, B ) ){
-                                break; // do for next A
+                            this->ExchangeFDInMinimalCover( i, A, B );
+                            if( RIGHT != this->Get( i, A ) ){ 
+                                break;
                             }
                         }
                     }
@@ -431,16 +431,21 @@ void SOF::BeMinimalCover(){
 
         }
     }
-    //this->Simple();
+
+    //this->PrintFDs(TRUE);
+
+    this->Simple(-1);
+
+
     /** check if X+ contains A using ( G-{X->A} ) */
     for( int i=0;i < fdN;i++ ){
         for( int A=0;A< attributeN;A++ ){
             if( RIGHT == this->Get( i, A ) ){
                 SOF* sofTemp = this->Clone();
-                Fd* fdTemp = this->FdClone( i, LO );
+                FD* fdTemp = this->FDClone( i, LO );
                 //fdTemp->Set( A, NOTUSE );
                 sofTemp->Set( i, A, NOTUSE );
-                sofTemp->AddFd( fdTemp, -1 );
+                sofTemp->AddFD( fdTemp, -1 );
                 /////////////////////////////
                 sofTemp->BeClosure( sofTemp->fdN - 1 );
                 // check if X+
@@ -451,7 +456,7 @@ void SOF::BeMinimalCover(){
             }
         }
     }
-    //this->Simple();
+    this->Simple(-1);
 }
 void SOF::BeKey(){ /// Be+하고나서..
     SOF* sofTemp = this->Clone();
@@ -469,7 +474,7 @@ void SOF::BeKey(){ /// Be+하고나서..
             if( ADDLEFT == this->Get( i, A ) ){
                 // make function?
                 SOF* temp = sofTemp->Clone();
-                Fd* fdTemp = this->FdClone( i, ALL );
+                FD* fdTemp = this->FDClone( i, ALL );
 
                 for( int j=0;j< this->attributeN;j++ ){
                     if( RIGHT == fdTemp->Get( j ) || j == A ){
@@ -477,7 +482,7 @@ void SOF::BeKey(){ /// Be+하고나서..
                     }
                 }
                 temp->Set( i, A, NOTUSE ); /// remove X->A
-                temp->AddFd( fdTemp, -1 );
+                temp->AddFD( fdTemp, -1 );
                 temp->BeClosure( temp->fdN - 1 );
                 if( RIGHT == temp->Get( temp->fdN-1, A ) ){
                     this->Set( i, A, NOTUSE );
@@ -488,12 +493,12 @@ void SOF::BeKey(){ /// Be+하고나서..
     delete sofTemp;
 
     // 중복, LEFT가 EMPTY, RIGHT가 EMPTY인경우를 제외한다.
-    //Simple();
+    Simple(-1);
     // LEFT와 ADDLEFT를 포함해서, 다른 FD들에 포함되면
     // 제외한다...
-    //SimpleKey();
+    SimpleKey();
 }
-int SOF::GetFdN()const{
+int SOF::GetFDN()const{
     return fdN;
 }
 /* only using in class function */
