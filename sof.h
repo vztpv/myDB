@@ -51,7 +51,7 @@ public:
     //
     void BeClosure(); /** fd�� �߰�, ������ ����. */
     void BeClosure( const int checki );
-    void ExchangeFDInMinimalCover( const int fdNo, const int right, const int left );
+    bool ExchangeFDInMinimalCover( const int fdNo, const int right, const int left );
     void BeMinimalCover(); /** fd�� �߰�, ������ �Ͼ �� �ִ�. */
 	//
 	void GetClosure( FD* fd );

@@ -365,10 +365,12 @@ void SOF::BeClosure( const int checki ){
         }
     }
 }
-void SOF::ExchangeFDInMinimalCover( const int fdNo, const int right, const int left ){
+bool SOF::ExchangeFDInMinimalCover( const int fdNo, const int right, const int left ){
     FD* fdTemp = this->fds[fdNo]->Clone( LO );
     SOF* sof = this->Clone();
     int index;
+    bool ret = false;
+
     fdTemp->Set( left, NOTUSE );
     index = sof->AddFD( fdTemp, -1 );
     //
@@ -377,18 +379,17 @@ void SOF::ExchangeFDInMinimalCover( const int fdNo, const int right, const int l
     if( RIGHT == sof->Get( index, right ) ){
         FD* fdTemp = fds[fdNo]->Clone( LO );
         fdTemp->Set( left, NOTUSE );
-        this->Set( fdNo, right, NOTUSE );
+        this->Set( fdNo, left, NOTUSE );
         fdTemp->Set( right, RIGHT );
         index = this->AddFD( fdTemp, -1 );
-        //
-        //cout << "AddFD" << endl;
+        ret = true;
     }
     if( sof->fdN > 1000 ){
         cout << "fdN is " << fdN << endl;
     }
     /// delete temp /// cf using clone then more easy!! // later change!!
     delete sof; sof = NULL;
-
+    return ret;
 }
 //get
 void SOF::GetClosure( FD* fd ){
@@ -420,19 +421,18 @@ void SOF::BeMinimalCover(){
                     for( int B=0;B < this->attributeN;B++ ){
                         if( LEFT == this->Get( i, B )  //
                             ){ // is A
-                            this->ExchangeFDInMinimalCover( i, A, B );
-                            if( RIGHT != this->Get( i, A ) ){ 
-                                break;
+                            // (X-{B})+ contains A.
+                            if (this->ExchangeFDInMinimalCover( i, A, B )) {
+                                //
                             }
                         }
                     }
 				}
             }
-
         }
     }
 
-    //this->PrintFDs(TRUE);
+    this->PrintFDs(TRUE);
 
     this->Simple(-1);
 
